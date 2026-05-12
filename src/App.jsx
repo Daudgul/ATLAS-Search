@@ -200,7 +200,10 @@ export default function App() {
             LinkedIn Profile
           </a>
         </div>
-        <span>© 2024 ATLAS Search · Built with SearchSpring API</span>
+        <span>
+          © {new Date().getFullYear()} ATLAS Search · Built with SearchSpring
+          API
+        </span>
       </footer>
     </div>
   );
