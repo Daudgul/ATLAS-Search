@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import styles from "../styles/globalStyles";
+import { useState, useEffect, useRef } from "react";
 import Spinner from "./Spinner";
 
 export default function SearchBar({ onSearch, loading }) {
@@ -10,16 +9,15 @@ export default function SearchBar({ onSearch, loading }) {
     inputRef.current?.focus();
   }, []);
 
-  const handleSubmit = (e) => {
-    e?.preventDefault?.();
+  const handleSubmit = () => {
     const trimmed = value.trim();
     if (trimmed) onSearch(trimmed);
   };
 
   return (
-    <div style={styles.searchWrap}>
-      <div style={styles.searchBox}>
-        <span style={styles.searchIcon}>
+    <div className="search-wrap">
+      <div className="search-box">
+        <span className="search-icon">
           <svg
             width="18"
             height="18"
@@ -34,21 +32,24 @@ export default function SearchBar({ onSearch, loading }) {
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </span>
+
         <input
           ref={inputRef}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="Search products — jeans, shoes, jackets…"
-          style={styles.input}
+          className="search-input"
           autoComplete="off"
           spellCheck="false"
         />
+
         {value && (
           <button
+            className="clear-btn"
             onClick={() => setValue("")}
-            style={styles.clearBtn}
             title="Clear"
+            aria-label="Clear search"
           >
             <svg
               width="14"
@@ -64,13 +65,12 @@ export default function SearchBar({ onSearch, loading }) {
             </svg>
           </button>
         )}
+
         <button
+          className="search-btn"
           onClick={handleSubmit}
           disabled={!value.trim() || loading}
-          style={{
-            ...styles.searchBtn,
-            opacity: !value.trim() || loading ? 0.45 : 1,
-          }}
+          aria-label="Search"
         >
           {loading ? <Spinner size={16} /> : "Search"}
         </button>

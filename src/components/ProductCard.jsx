@@ -1,9 +1,9 @@
 import { useState } from "react";
-import styles from "../styles/globalStyles";
-import { formatPrice } from "../utils/formatPrice";
+import { formatPrice } from "../utils/helpers";
 
 export default function ProductCard({ product, index }) {
   const { name, thumbnailImageUrl, price, msrp } = product;
+
   const priceNum = parseFloat(price);
   const msrpNum = parseFloat(msrp);
   const hasDiscount = msrp && msrpNum > priceNum;
@@ -12,24 +12,14 @@ export default function ProductCard({ product, index }) {
     : null;
 
   const [imgError, setImgError] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  const delay = `${(index % 10) * 40}ms`;
+  const animationDelay = `${(index % 10) * 45}ms`;
 
   return (
-    <div
-      style={{
-        ...styles.card,
-        ...(hovered ? styles.cardHover : {}),
-        animationDelay: delay,
-      }}
-      className="card-animate"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div style={styles.imageWrap}>
+    <div className="card" style={{ animationDelay }}>
+      {/* Image */}
+      <div className="card-image-wrap">
         {imgError || !thumbnailImageUrl ? (
-          <div style={styles.imgPlaceholder}>
+          <div className="card-img-placeholder">
             <svg
               width="32"
               height="32"
@@ -47,22 +37,21 @@ export default function ProductCard({ product, index }) {
           <img
             src={thumbnailImageUrl}
             alt={name}
-            style={{
-              ...styles.img,
-              transform: hovered ? "scale(1.07)" : "scale(1)",
-            }}
+            className="card-img"
             onError={() => setImgError(true)}
             loading="lazy"
           />
         )}
-        {hasDiscount && <span style={styles.discountBadge}>−{discount}%</span>}
+
+        {hasDiscount && <span className="discount-badge">−{discount}%</span>}
       </div>
 
-      <div style={styles.cardBody}>
-        <p style={styles.productName}>{name || "Unnamed Product"}</p>
-        <div style={styles.priceRow}>
-          <span style={styles.price}>{formatPrice(price) ?? "—"}</span>
-          {hasDiscount && <span style={styles.msrp}>{formatPrice(msrp)}</span>}
+      {/* Body */}
+      <div className="card-body">
+        <p className="product-name">{name || "Unnamed Product"}</p>
+        <div className="price-row">
+          <span className="price">{formatPrice(price) ?? "—"}</span>
+          {hasDiscount && <span className="msrp">{formatPrice(msrp)}</span>}
         </div>
       </div>
     </div>
