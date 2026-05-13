@@ -94,7 +94,6 @@ const handleFilterToggle = useCallback((field, value) => {
 
     let updatedValues = [];
 
-    // PRICE RANGE FILTERS
     if (
       field === "price" &&
       typeof value === "object"
@@ -117,7 +116,6 @@ const handleFilterToggle = useCallback((field, value) => {
         : [...currentValues, value];
     }
 
-    // NORMAL FILTERS
     else {
 
       updatedValues = currentValues.includes(value)
