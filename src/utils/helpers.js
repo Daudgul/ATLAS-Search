@@ -1,30 +1,18 @@
-export const RESULTS_PER_PAGE = 20;
-export const PAGE_WINDOW = 2;
-
-
-export function formatPrice(val) {
-  const n = parseFloat(val);
-  if (isNaN(n)) return null;
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+export function htmlDecode(str = "") {
+  return str
+    .replace(/&amp;/g, "&")
+    .replace(/&gt;/g, ">")
+    .replace(/&lt;/g, "<")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
 }
 
+export function extractFacets(facets = []) {
+  const result = {};
 
-export function getPageRange(current, total) {
-  const pages = [];
-  const start = Math.max(1, current - PAGE_WINDOW);
-  const end = Math.min(total, current + PAGE_WINDOW);
+  facets.forEach((item) => {
+    result[item.field] = item;
+  });
 
-  if (start > 1) {
-    pages.push(1);
-    if (start > 2) pages.push("…");
-  }
-
-  for (let i = start; i <= end; i++) pages.push(i);
-
-  if (end < total) {
-    if (end < total - 1) pages.push("…");
-    pages.push(total);
-  }
-
-  return pages;
+  return result;
 }

@@ -1,0 +1,147 @@
+.filterButton {
+  height: 40px;
+
+  padding: 0 18px;
+
+  border-radius: var(--radius-sm);
+
+  border: 1px solid var(--border);
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  transition: var(--transition);
+}
+
+.filterButton span {
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+
+  color: white;
+
+  font-size: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterButton:hover {
+  border-color: var(--primary);
+}
+
+.filterButton--active {
+  border-color: var(--primary);
+}
+
+.filterOverlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  z-index: 200;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filterPanel {
+  width: 340px;
+  height: 100vh;
+
+  background: white;
+
+  padding: 24px;
+
+  overflow-y: auto;
+}
+
+.filterPanel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 30px;
+}
+
+.filterPanel__header h2 {
+  font-family: var(--font-heading);
+}
+
+.filterPanel__section {
+  margin-bottom: 30px;
+}
+
+.filterPanel__section h3 {
+  margin-bottom: 14px;
+
+  font-size: 14px;
+}
+
+.filterOptions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+.filterOptions button {
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  border: 1px solid var(--border);
+
+  background: white;
+
+  transition: var(--transition);
+}
+
+.filterOptions button.selected {
+  background: var(--primary);
+
+  color: white;
+
+  border-color: var(--primary);
+}
+
+.filterPanel__footer {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 40px;
+}
+
+.clearButton,
+.doneButton {
+  flex: 1;
+
+  height: 42px;
+
+  border-radius: var(--radius-sm);
+}
+
+.clearButton {
+  border: 1px solid var(--border);
+}
+
+.doneButton {
+  background: var(--primary);
+
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .filterPanel {
+    width: 100%;
+  }
+}

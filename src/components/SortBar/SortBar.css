@@ -1,0 +1,44 @@
+.sortBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 24px;
+}
+
+.sortBar__results {
+  font-size: 15px;
+
+  color: var(--text-light);
+}
+
+.sortBar__results strong {
+  color: var(--text);
+}
+
+.sortBar select {
+  height: 40px;
+
+  padding: 0 14px;
+
+  border-radius: var(--radius-sm);
+
+  border: 1px solid var(--border);
+
+  background: white;
+
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .sortBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sortBar select {
+    width: 100%;
+  }
+}

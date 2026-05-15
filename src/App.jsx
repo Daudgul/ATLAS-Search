@@ -1,154 +1,84 @@
-import { useRef } from "react";
 import "./App.css";
 
-import LandingPage from "./components/LandingPage";
-import SearchBar from "./components/SearchBar";
-import ProductCard from "./components/ProductCard";
-import Pagination from "./components/Pagination";
-import ResultsMeta from "./components/ResultsMeta";
-import SkeletonGrid from "./components/SkeletonGrid";
-import FilterSidebar from "./components/FilterSidebar";
-import SortBar from "./components/SortBar";
-import { EmptyState, ErrorState } from "./components/States";
-import { useSearch } from "./hooks/useSearch";
+import useProducts from "./hooks/useProducts";
+
+import Header from "./components/Header/Header";
+
+import ProductGrid from "./components/ProductGrid/ProductGrid";
+
+import Pagination from "./components/Pagination/Pagination";
+
+import SortBar from "./components/SortBar/SortBar";
+
+import FilterPanel from "./components/FilterPanel/FilterPanel";
 
 export default function App() {
-  console.log("COMPONENT RENDERED");
   const {
     query,
-    page,
+    searchInput,
+    setSearchInput,
     products,
     facets,
-    sortOptions,
-    totalResults,
+    page,
     totalPages,
-    filters,
-    activeFilterCount,
-    sort,
+    totalResults,
     loading,
     error,
-    hasSearched,
+    filters,
+    activeFilterCount,
+    sortBy,
+    setSortBy,
+    sortOptions,
     handleSearch,
     handlePageChange,
-    handleFilterToggle,
-    handleClearFilters,
-    handleSortChange,
+    updateFilter,
+    resetFilters,
     retry,
-  } = useSearch();
-
-  const resultsRef = useRef(null);
-
-  const onPageChange = (p) => {
-    handlePageChange(p);
-    setTimeout(
-      () =>
-        resultsRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        }),
-      80,
-    );
-  };
-
-  if (!hasSearched && !loading) {
-    return <LandingPage onEnterSearch={handleSearch} />;
-  }
-
-  const showSkeleton = loading && products.length === 0;
-  const showOverlay = loading && products.length > 0;
-  const showError = !loading && !!error;
-  const showEmpty = !loading && !error && hasSearched && products.length === 0;
-  const showResults = products.length > 0;
+  } = useProducts();
 
   return (
-    <div className="app-root">
-      <header className="header">
-        <div className="header-inner">
-          <button
-            className="logo"
-            onClick={() => window.location.reload()}
-            style={{ background: "none", border: "none", cursor: "pointer" }}
-            aria-label="Go to home"
-          >
-            <span className="logo-mark">✦</span>
-            <span className="logo-text">ATLAS</span>
-            <span className="logo-pill">Search</span>
-          </button>
+    <>
+      <Header
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        onSearch={handleSearch}
+      />
 
-          <SearchBar onSearch={handleSearch} loading={loading} />
-        </div>
-      </header>
+      <main className="app">
+        <div className="app__toolbar">
+          <SortBar
+            totalResults={totalResults}
+            query={query}
+            sortBy={sortBy}
+            sortOptions={sortOptions}
+            setSortBy={setSortBy}
+          />
 
-      <div className="content-layout">
-        {(facets.length > 0 || loading) && (
-          <FilterSidebar
+          <FilterPanel
             facets={facets}
             filters={filters}
+            updateFilter={updateFilter}
+            resetFilters={resetFilters}
             activeFilterCount={activeFilterCount}
-            onToggle={handleFilterToggle}
-            onClear={handleClearFilters}
-            loading={loading}
           />
-        )}
+        </div>
 
-        <main className="main" ref={resultsRef}>
-          <div className="results-area">
-            {(showResults || showSkeleton) && (
-              <SortBar
-                sortOptions={sortOptions}
-                activeSort={sort}
-                onSortChange={handleSortChange}
-                filters={filters}
-                facets={facets}
-                onFilterToggle={handleFilterToggle}
-                totalResults={totalResults}
-                loading={loading}
-              />
-            )}
-
-            {showSkeleton && <SkeletonGrid count={8} />}
-            {showError && <ErrorState message={error} onRetry={retry} />}
-            {showEmpty && <EmptyState query={query} />}
-
-            {showResults && (
-              <>
-                <ResultsMeta
-                  query={query}
-                  total={totalResults}
-                  current={page}
-                />
-
-                <Pagination
-                  current={page}
-                  total={totalPages}
-                  onChange={onPageChange}
-                />
-
-                <div className={`grid${showOverlay ? " grid-loading" : ""}`}>
-                  {products.map((product, i) => (
-                    <ProductCard
-                      key={product.id ?? `${query}-${page}-${i}`}
-                      product={product}
-                      index={i}
-                    />
-                  ))}
-                </div>
-
-                <Pagination
-                  current={page}
-                  total={totalPages}
-                  onChange={onPageChange}
-                />
-              </>
-            )}
+        {error ? (
+          <div className="app__error">
+            <p>{error}</p>
+            <button onClick={retry}>Try Again</button>
           </div>
-        </main>
-      </div>
-
-      <footer className="footer">
-        <span className="footer-logo">✦ ATLAS</span>
-        <span>Powered by SearchSpring · © {new Date().getFullYear()}</span>
-      </footer>
-    </div>
+        ) : (
+          <>
+            <ProductGrid products={products} loading={loading} query={query} />
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+      </main>
+    </>
   );
 }
